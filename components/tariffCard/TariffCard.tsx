@@ -1,5 +1,3 @@
-import "./tariffCard.style.scss";
-
 interface TariffCardProps {
     id: string;
     period: string;

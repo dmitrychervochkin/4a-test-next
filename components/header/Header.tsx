@@ -5,7 +5,7 @@ export const Header = ({
 }: {
     setIsLostTime: (p: boolean) => void;
 }) => {
-    const [timeLeft, setTimeLeft] = useState(35);
+    const [timeLeft, setTimeLeft] = useState(120);
 
     useEffect(() => {
         if (timeLeft <= 0) {
