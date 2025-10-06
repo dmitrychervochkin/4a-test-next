@@ -1,88 +1,73 @@
+import React from "react";
+
 interface TariffCardProps {
     id: string;
     period: string;
     price: number;
-    fullPrice: number;
-    isBest: boolean;
+    full_price: number;
+    is_best?: boolean;
     text: string;
-    isLostTime: boolean;
+    currentTariff: { id: string; period: string; price: number | null };
     setCurrentTariff: (value: {
         id: string;
         period: string;
         price: number | null;
     }) => void;
-    currentTariff: {
-        id: string;
-        period: string;
-        price: number | null;
-    };
 }
 
-function getSale(price: number, fullPrice: number) {
-    return Math.round(((fullPrice - price) / fullPrice) * 100);
-}
-
-export const TariffCard = ({
+export const TariffCard: React.FC<TariffCardProps> = ({
     id,
     period,
     price,
-    fullPrice,
-    isBest,
+    full_price: fullPrice,
+    is_best: isBest,
     text,
-    setCurrentTariff,
     currentTariff,
-    isLostTime,
-}: TariffCardProps) => {
+    setCurrentTariff,
+}) => {
+    const getSale = (price: number, fullPrice: number) =>
+        Math.round(((fullPrice - price) / fullPrice) * 100);
+
     return (
         <div
-            className={`bg-[#313637] flex gap-[50px] rounded-[40px] relative border-[2px] border-[#484d4e] transition-colors duration-200 hover:cursor-pointer hover:border-[#a1a1a1] max-md:w-full max-md:rounded-[20px] max-md:p-5 max-md:h-full max-md:flex-row max-md:items-center max-md:justify-between  ${
-                isBest
-                    ? "row-start-1 col-span-3 flex items-center gap-[50px] p-[30px_100px]"
-                    : "flex flex-col h-[335px] p-[30px_20px]"
-            } ${
-                currentTariff.period === period
-                    ? "border-2 border-[#fdb056]"
-                    : ""
-            }`}
-            key={id}
+            className={`
+        relative w-full h-full rounded-[20px] py-8 px-4 cursor-pointer border-2
+        ${
+            currentTariff.period === period
+                ? "border-[#fdb056]"
+                : "border-[#484d4e]"
+        }
+        ${isBest ? "flex-row" : "flex-col"}
+        hover:border-[#a1a1a1] transition-colors
+        bg-[#313637] text-white 
+        flex justify-between gap-5 items-center
+        max-md:px-3 max-md:py-5 max-md:flex-row
+      `}
             onClick={() => setCurrentTariff({ id, period, price })}
         >
-            <div
-                className={`text-center max-md:max-w-[200px] max-md:flex-1 max-sm:p-[30px_10px] ${
-                    isBest ? "min-w-[300px] min-w-0" : ""
-                }`}
-            >
+            <div className="space-y-2 flex-1 text-center max-md:text-left max-w-[200] max-md:max-w-[100]">
+                <div className="text-lg font-semibold">{period}</div>
                 <div
-                    className={`text-[26px] max-md:m-0 max-md:text-[18px] max-xs:text-[16px] ${
-                        isBest ? "my-2.5" : "my-7.5"
-                    }`}
-                >
-                    {period}
-                </div>
-                <div
-                    className={`text-[50px] font-semibold max-md:text-[34px] max-xs:text-[20px] ${
+                    className={`text-4xl font-bold ${
                         isBest ? "text-[#fdb056]" : ""
-                    }`}
+                    } max-md:text-2xl`}
                 >
-                    {isLostTime ? fullPrice : price} ₽
+                    {price} ₽
                 </div>
-                {!isLostTime && (
-                    <div className="text-[24px] text-[#919191] line-through w-full text-right max-md:text-[16px] max-xs:text-[14px]">
-                        {fullPrice} ₽
-                    </div>
-                )}
+                <div className="text-sm text-[#919191] line-through text-right">
+                    {fullPrice} ₽
+                </div>
             </div>
-            <div className="text-[16px] max-md:flex-1 max-md:text-[14px] max-xs:text-[12px]">
-                {text}
-            </div>
-            <div className="absolute bg-[#fd5656] text-[22px] font-light px-[8px] py-[5px] rounded-bl-[7px] rounded-br-[7px] top-0 left-[40px] max-md:text-[14px] max-md:px-2 max-md:py-[5px] max-md:top-0 max-md:left-auto max-md:right-[50px]">
-                -{getSale(price, fullPrice)} %
-            </div>
+            <div className="text-sm flex-1">{text}</div>
+
             {isBest && (
-                <div className="absolute text-[#fdb056] text-[22px] top-[10px] right-[25px] max-md:text-[14px] max-md:top-[5px] max-md:right-[10px]">
+                <div className="absolute top-0 right-0 text-[#fdb056] px-2 py-1 ">
                     хит!
                 </div>
             )}
+            <div className="absolute top-0 left-10 bg-[#fd5656] px-2 py-1 text-white rounded max-md:left-auto max-md:right-12 max-md:p-1 max-md:text-xs">
+                -{getSale(price, fullPrice)}%
+            </div>
         </div>
     );
 };

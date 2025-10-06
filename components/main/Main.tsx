@@ -20,6 +20,7 @@ interface MainProps {
         id: string;
         period: string;
         price: number | null;
+        full_price: number;
     };
     setCurrentTariff: (value: {
         id: string;
@@ -69,34 +70,26 @@ export const Main = ({
                     src="./img.png"
                 />
                 <div className="flex flex-col ml-5 max-[1200px]:ml-0 mt-0 max-[1200px]:mt-5">
-                    <div className="grid grid-cols-3 auto-rows-auto gap-4 max-[800px]:flex max-[800px]:flex-col">
+                    <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-3 md:auto-rows-auto">
                         {tariffs
                             .sort((a, b) => b.price - a.price)
-                            .map(
-                                ({
-                                    id,
-                                    period,
-                                    price,
-                                    full_price,
-                                    is_best,
-                                    text,
-                                }) => (
+                            .map((tariff, index) => (
+                                <div
+                                    key={tariff.period}
+                                    className={`${
+                                        index === 0 ? "md:col-span-3" : ""
+                                    } w-full`}
+                                >
                                     <TariffCard
-                                        key={id}
-                                        id={id}
-                                        period={period}
-                                        price={price}
-                                        fullPrice={full_price}
-                                        isBest={is_best}
-                                        text={text}
+                                        {...tariff}
                                         currentTariff={currentTariff}
                                         setCurrentTariff={setCurrentTariff}
-                                        isLostTime={isLostTime}
                                     />
-                                )
-                            )}
+                                </div>
+                            ))}
 
-                        <div className="flex bg-[#2d3233] p-[18px_20px] rounded-[20px] text-[16px] gap-2.5 col-span-2 max-[800px]:text-[12px]">
+                        {/* Информационный блок */}
+                        <div className="flex bg-[#2d3233] p-[18px_20px] rounded-[20px] text-[16px] gap-2.5 w-full md:col-span-2 max-[800px]:text-[12px]">
                             <div className="text-[20px] text-[#fdb056] max-[800px]:text-[16px]">
                                 !
                             </div>
